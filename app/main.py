@@ -7,6 +7,8 @@ import json
 from dotenv import load_dotenv
 import requests
 
+
+
 load_dotenv()
 
 FILMAPI = os.getenv('FILMAPI')
@@ -77,34 +79,30 @@ class MyServer(BaseHTTPRequestHandler):
 
         animalChoice = parsed_data.get('pets[]', [''])[0]
 
+        profileData = {}
+
         if animalChoice == 'cat':
             #do cat api call
-            catImage = requests.get("https://api.thecatapi.com/v1/images/search").json()
-            with open('animal.json', 'w') as file:
-                file.write(json.dumps(catImage))
+            catImage = requests.get("https://api.thecatapi.com/v1/images/search").json()["url"]
+            profileData.update({"animal" : catImage})
         elif animalChoice == 'dog':   
-            dogImage = requests.get("https://dog.ceo/api/breeds/image/random").json()
-            with open('animal.json', 'w') as file:
-                file.write(json.dumps(dogImage))
+            dogImage = requests.get("https://dog.ceo/api/breeds/image/random").json()["message"]
+            profileData.update({"animal" : dogImage})
+
         elif animalChoice == 'duck':
-            duckImage = requests.get("https://random-d.uk/api/v2/random").json()
-            with open('animal.json', 'w') as file:
-                file.write(json.dumps(duckImage))
+            duckImage = requests.get("https://random-d.uk/api/v2/random").json()["url"]
+            profileData.update({"animal" : duckImage})
 
-
-
-
-
-        
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
         self.wfile.write(bytes(f'Successfully received and written data', 'utf-8'))
-        with open('profile.json', 'w') as profile:
-            profile.write(json.dumps(parsed_data))
+        profileData.update(parsed_data)
 
-        with open('file.json', 'w') as file:
-            file.write(json.dumps(filedata))
+        profileData.update(filedata)
+
+        with open('final.json', 'w') as file:
+            file.write(json.dumps(profileData))
 
 
         
