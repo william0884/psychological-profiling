@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import time
 import os
 import base64
+import urllib
 
 hostName = "localhost"
 serverPort = 8082
@@ -35,10 +36,30 @@ class MyServer(BaseHTTPRequestHandler):
                         self.send_header("Content-type", "text/html")
                         self.end_headers()
                         self.wfile.write(file.read())
+
+                elif self.path == '/analytics':
+                    file_path = os.path.join(os.path.dirname(__file__), 'analytics.html')
+                    with open(file_path, 'rb') as file:
+                        self.send_response(200)
+                        self.send_header("Content-type", "text/html")
+                        self.end_headers()
+                        self.wfile.write(file.read())
                 else:
                     self.send_error(404, 'Not Found: {}'.format(self.path))
             except Exception as e:
                 self.send_error(500, 'Internal Server Error: {}'.format(e))
+
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length).decode('utf-8')
+        parsed_data = urllib.parse.parse_qs(post_data)
+
+
+        name = parsed_data.get('name', [''])[0]
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        self.wfile.write(bytes(f'Successfully received data: {name}', 'utf-8'))
 
         
     def authenticate(self, auth_header):

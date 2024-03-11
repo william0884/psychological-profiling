@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Success Page</title>
+</head>
+<body>
+  <h1>Form Data on Success Page</h1>
+
+  <script>
+    // Retrieve and parse query parameters
+    var params = new URLSearchParams(window.location.search);
+    
+    // Example: Display the 'name' parameter
+    var name = params.get('name');
+    document.body.innerHTML += '<p>Name: ' + (name ? name : 'Not provided') + '</p>';
+
+    // Display other form fields as needed
+    var gender = params.get('gender');
+    document.body.innerHTML += '<p>Gender: ' + (gender ? gender : 'Not provided') + '</p>';
+
+    var birthyear = params.get('birthyear');
+    document.body.innerHTML += '<p>Birth Year: ' + (birthyear ? birthyear : 'Not provided') + '</p>';
+
+    var birthplace = params.get('birthplace');
+    document.body.innerHTML += '<p>Birthplace: ' + (birthplace ? birthplace : 'Not provided') + '</p>';
+
+    var residence = params.get('residence');
+    document.body.innerHTML += '<p>Residence: ' + (residence ? residence : 'Not provided') + '</p>';
+  </script>
+</body>
+</html>

@@ -8,9 +8,22 @@
       event.preventDefault();
       ids = document.querySelectorAll('*[id]')
       console.log(ids)
-      alert("Submit button clicked!");
 
-      return true;
+      var formData = {
+        name: document.forms["form"]["name"].value,
+        gender: document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : "",
+        birthyear: document.forms["form"]["birthyear"].value,
+        birthplace: document.forms["form"]["birthplace"].value,
+        residence: document.forms["form"]["residence"].value,
+      };
+
+
+      var queryString = Object.keys(formData).map(key => key + '=' + encodeURIComponent(formData[key])).join('&');
+
+      window.location.href = '/analytics?' + queryString;
+
+      return {'status': 'ok'};
+}
 }
 </script>
   <title>Personality Test</title>
