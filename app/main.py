@@ -1,32 +1,51 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import time
 import os
+import base64
 
 hostName = "localhost"
-serverPort = 8080
+serverPort = 8082
+
+USERNAME = "user"
+PASSWORD = "password"
 
 class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path == '/':
+        auth_header = self.headers.get('Authorization')
 
-            self.send_response(200)
-            self.send_header("Content-type", "text/html")
+        if auth_header is None or not self.authenticate(auth_header):
+            self.send_response(401)
+            self.send_header('WWW-Authenticate', 'Basic realm="Authentication required"')
             self.end_headers()
-            self.wfile.write(bytes("<html><head><title>Psychological Profiling</title></head>", "utf-8"))
-            self.wfile.write(bytes("<body>", "utf-8"))
-            self.wfile.write(bytes("<h1>Psychological Profiling</h1><br><p>Welcome to your psychological profile</p></br>", "utf-8"))
-            self.wfile.write(bytes("</body></html>", "utf-8"))
-        elif self.path == '/form':
-            file_path = os.path.join(os.path.dirname(__file__), 'form.html')
-            with open(file_path, 'rb') as file:
-                self.send_response(200)
-                self.send_header("Content-type", "text/html")
-                self.end_headers()
-                self.wfile.write(file.read())
+            self.wfile.write(b'Unauthorized')
         else:
-            self.send_error(404, 'Not Found: {}'.format(self.path))
-        
+            try:
+                if self.path == '/':
+                    file_path = os.path.join(os.path.dirname(__file__), 'index.html')
+                    with open(file_path, 'rb') as file:
+                        self.send_response(200)
+                        self.send_header("Content-type", "text/html")
+                        self.end_headers()
+                        self.wfile.write(file.read())
 
+                elif self.path == '/form':
+                    file_path = os.path.join(os.path.dirname(__file__), 'form.html')
+                    with open(file_path, 'rb') as file:
+                        self.send_response(200)
+                        self.send_header("Content-type", "text/html")
+                        self.end_headers()
+                        self.wfile.write(file.read())
+                else:
+                    self.send_error(404, 'Not Found: {}'.format(self.path))
+            except Exception as e:
+                self.send_error(500, 'Internal Server Error: {}'.format(e))
+
+        
+    def authenticate(self, auth_header):
+        credentials = base64.b64decode(auth_header.split(' ')[1]).decode('utf-8')
+        username, password = credentials.split(':', 1)
+
+        return username == USERNAME and password == PASSWORD
 if __name__ == "__main__":        
     webServer = HTTPServer((hostName, serverPort), MyServer)
     print("Server started http://%s:%s" % (hostName, serverPort))

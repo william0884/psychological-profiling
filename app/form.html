@@ -1,7 +1,18 @@
 <!-- HTML page for classical form input for 159.352 Assignment 1-->
+
 <!doctype html>
 <html>
 <head>
+  <script>
+    function foo() {
+      event.preventDefault();
+      ids = document.querySelectorAll('*[id]')
+      console.log(ids)
+      alert("Submit button clicked!");
+
+      return true;
+}
+</script>
   <title>Personality Test</title>
 </head>
 <body>
@@ -9,15 +20,12 @@
 </h1>
 
 <!-- Set the appropriate action -->
-<form method="post" action="" name="">
+<form method="post" action="/analysis" name="form">
 
-<p><input type="submit" name="submit" value="Submit">
-<input type="reset" name="reset" value="Clear"> </p>
-
-<table>
+  <table>
   <tr>
 <td><b>Input your name</b></td>
-<td><input type="text" name="name" size="25"></td>
+<td><input type="text" name="name" id="name" size="25"></td>
   </tr>
 <tr>  
 <td><b>What is your gender?</b></td>
@@ -103,7 +111,8 @@ putquestion("likes to work in a team", 20)
 <textarea name="message" cols="60" rows="6"></textarea>
 <br/><br/>
 
+<input type="submit" name="submit" onclick="return foo();" value="Submit">
+  <input type="reset" name="reset" value="Clear">
 </form>
-
 </body>
 </html>
