@@ -45,6 +45,13 @@ class MyServer(BaseHTTPRequestHandler):
                         self.send_header("Content-type", "text/html")
                         self.end_headers()
                         self.wfile.write(file.read())
+                elif self.path == '/input':
+                    with open('profile.json', 'rb') as proFile:
+                        self.send_response(200)
+                        self.send_header("Content-type", "application/json")
+                        self.end_headers()
+                        self.wfile.write(proFile.read())
+                
                 else:
                     self.send_error(404, 'Not Found: {}'.format(self.path))
             except Exception as e:
