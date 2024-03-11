@@ -3,6 +3,7 @@ import time
 import os
 import base64
 import urllib
+import json
 
 hostName = "localhost"
 serverPort = 8082
@@ -60,6 +61,9 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'text/html')
         self.end_headers()
         self.wfile.write(bytes(f'Successfully received data: {name}', 'utf-8'))
+        with open('profile.json', 'w') as profile:
+            profile.write(json.dumps(parsed_data))
+
 
         
     def authenticate(self, auth_header):
