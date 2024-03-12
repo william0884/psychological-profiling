@@ -2,7 +2,29 @@
 
 <!doctype html>
 <html>
-<head>
+  <header>
+    <nav class="flex items-center justify-between p-6 container mx-auto">
+        <!-- Logo -->
+        <p class="text-teal-800 text-2xl">Psychological Profiling</p>
+
+        <!-- Menu items -->
+        <div class="text-lg text-gray-600 lg:flex">
+            <a href="/" class="block mt-4 lg:inline-block text-teal-800 hover:text-blue-800 lg:mt-0 mr-10">
+                Home
+            </a>
+            <a href="/form" class="block mt-4 lg:inline-block hover:text-blue-800 lg:mt-0 mr-10">
+                Form
+            </a>
+            <a href="/view/profile" class="block mt-4 lg:inline-block hover:text-blue-800 lg:mt-0 mr-10">
+              Profile
+          </a>
+          <a href="/view/input" class="block mt-4 lg:inline-block hover:text-blue-800 lg:mt-0 mr-10">
+              Input
+          </a>
+        </div>
+
+    </nav>
+</header>
   <script>
     function foo() {
       event.preventDefault();
@@ -20,13 +42,16 @@
 
       var queryString = Object.keys(formData).map(key => key + '=' + encodeURIComponent(formData[key])).join('&');
 
-      window.location.href = '/analytics?' + queryString;
+      //window.location.href = '/analysis?' + queryString;
 
-      return {'status': 'ok'};
+      alert('Form data submited');
+      return({'status' : 'ok'})
 }
 
 </script>
   <title>Personality Test</title>
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
 </head>
 <body>
 <h1>Online Personality Test<br>

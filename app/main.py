@@ -46,19 +46,20 @@ class MyServer(BaseHTTPRequestHandler):
                         self.end_headers()
                         self.wfile.write(file.read())
 
-                elif self.path == '/analytics':
-                    file_path = os.path.join(os.path.dirname(__file__), 'analytics.html')
-                    with open(file_path, 'rb') as file:
-                        self.send_response(200)
-                        self.send_header("Content-type", "text/html")
-                        self.end_headers()
-                        self.wfile.write(file.read())
-                elif self.path == '/input':
+                elif self.path == 'view/input':
                     with open('profile.json', 'rb') as proFile:
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
                         self.wfile.write(proFile.read())
+                elif self.path == 'view/profile':
+                    file_path = os.path.join(os.path.dirname(__file__), 'profile.html')
+                    with open(file_path, 'rb') as file:
+                        self.send_response(200)
+                        self.send_header("Content-type", "text/html")
+                        self.end_headers()
+                        self.wfile.write(file.read())
+
                 
                 else:
                     self.send_error(404, 'Not Found: {}'.format(self.path))
@@ -101,7 +102,7 @@ class MyServer(BaseHTTPRequestHandler):
 
         profileData.update(filedata)
 
-        with open('final.json', 'w') as file:
+        with open('profile.json', 'w') as file:
             file.write(json.dumps(profileData))
 
 
