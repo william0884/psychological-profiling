@@ -27,25 +27,33 @@
 </header>
   <script>
     function foo() {
-      event.preventDefault();
-      ids = document.querySelectorAll('*[id]')
-      console.log(ids)
+    event.preventDefault(); // Prevent default form submission behavior
 
-      var formData = {
+    var formData = {
         name: document.forms["form"]["name"].value,
         gender: document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : "",
         birthyear: document.forms["form"]["birthyear"].value,
         birthplace: document.forms["form"]["birthplace"].value,
         residence: document.forms["form"]["residence"].value,
-      };
+    };
 
+    var xhr = new XMLHttpRequest(); // Create a new XMLHttpRequest object
+    xhr.open("POST", "/analysis", true); // Specify the POST method and the endpoint
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8"); // Set the content type
 
-      var queryString = Object.keys(formData).map(key => key + '=' + encodeURIComponent(formData[key])).join('&');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                alert("Form submitted successfully!"); // Show success message
+            } else {
+                alert("Error: " + xhr.status); // Show error message
+            }
+        }
+    };
 
-      //window.location.href = '/analysis?' + queryString;
+    xhr.send(JSON.stringify(formData)); // Send the form data as JSON
 
-      alert('Form data submited');
-      return({'status' : 'ok'})
+    return false; // Prevent default form submission behavior
 }
 
 </script>
