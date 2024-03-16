@@ -47,7 +47,7 @@ class MyServer(BaseHTTPRequestHandler):
                         self.wfile.write(file.read())
 
                 elif self.path == '/view/input':
-                    with open('/profile.json', 'rb') as proFile:
+                    with open('profile.json', 'rb') as proFile:
                         self.send_response(200)
                         self.send_header("Content-type", "application/json")
                         self.end_headers()
@@ -72,21 +72,32 @@ class MyServer(BaseHTTPRequestHandler):
             post_data = self.rfile.read(content_length).decode('utf-8')
             parsed_data = urllib.parse.parse_qs(post_data)
 
+            print('the data: ' + str(parsed_data))
+
+            
+
             name = parsed_data.get('name', [''])[0]
 
             year = parsed_data.get('birthyear', [''])[0]
 
+            animalChoice = parsed_data.get('animals', [''])[0]
+
+
+
             filedata = requests.get('https://www.omdbapi.com/?y=2000&apikey=a97a29ca&t=a').json()
 
 
-            animalChoice = parsed_data.get('pets[]', [''])[0]
+            #animalChoice = parsed_data.get('pets[]', [''])[0]
 
-            profileData = {}
+
+            profileData = dict()
 
             if animalChoice == 'cat':
                 #do cat api call
-                catImage = requests.get("https://api.thecatapi.com/v1/images/search").json()["url"]
+
+                catImage = requests.get("https://api.thecatapi.com/v1/images/search").json()
                 profileData.update({"animal" : catImage})
+    
             elif animalChoice == 'dog':   
                 dogImage = requests.get("https://dog.ceo/api/breeds/image/random").json()["message"]
                 profileData.update({"animal" : dogImage})
@@ -99,9 +110,10 @@ class MyServer(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'text/html')
             self.end_headers()
             self.wfile.write(bytes(f'Successfully received and written data', 'utf-8'))
-            profileData.update(parsed_data)
-
-            profileData.update(filedata)
+            profileData.update({'user' : parsed_data})
+            profileData.update({'film' : filedata})
+            print(profileData)
+      
 
             with open('profile.json', 'w') as file:
                 file.write(json.dumps(profileData))

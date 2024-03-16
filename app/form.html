@@ -26,20 +26,43 @@
     </nav>
 </header>
   <script>
+
+    function getQuestionResponses() {
+        var questionResponses = {};
+        var radioButtons = document.querySelectorAll('input[type="radio"]');
+        radioButtons.forEach(function(radioButton) {
+            var questionNumber = radioButton.name.match(/\d+/)[0]; // Extract question number from input name
+            if (!questionResponses[questionNumber]) {
+                questionResponses[questionNumber] = radioButton.value;
+            }
+        });
+        return questionResponses;
+    }
+
     function foo() {
     event.preventDefault(); // Prevent default form submission behavior
 
+    ids = document.querySelectorAll('*[id]')
+
+    console.log(ids)
     var formData = {
         name: document.forms["form"]["name"].value,
         gender: document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : "",
         birthyear: document.forms["form"]["birthyear"].value,
         birthplace: document.forms["form"]["birthplace"].value,
         residence: document.forms["form"]["residence"].value,
+        animal: document.forms["form"]["animal"].value,
+
     };
+
+    // Convert the formData object to a URL-encoded query string
+    var queryString = Object.keys(formData).map(key => key + '=' + encodeURIComponent(formData[key])).join('&');
+
+    //var queryString = Object.keys(ids).map(key => key + '=' + encodeURIComponent(ids[key])).join('&');
 
     var xhr = new XMLHttpRequest(); // Create a new XMLHttpRequest object
     xhr.open("POST", "/analysis", true); // Specify the POST method and the endpoint
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8"); // Set the content type
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // Set the content type
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -51,11 +74,10 @@
         }
     };
 
-    xhr.send(JSON.stringify(formData)); // Send the form data as JSON
+    xhr.send(queryString); // Send the form data as a query string
 
     return false; // Prevent default form submission behavior
 }
-
 </script>
   <title>Personality Test</title>
   <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
@@ -134,26 +156,26 @@ putquestion("likes to work in a team", 20)
 </script>
 </ol>
 
-<p><hr noshade size=2>
-
-<p><b>Which of these jobs would be most appealing to you?</b><br/>
-<select name=job>
-<option value="ceo">CEO of large mega-corporation<br/>
-<option value="astronaut">Astronaut<br/>
-<option value="doctor">Medical doctor<br/>
-<option value="model">Fashion model<br/>
-<option value="rockstar">Rock star<br/>
-<option value="garbage">Refuse collection operative<br/>
+<label for="job">Choose a job:</label><br />
+<select name="job">
+<option value="ceo">CEO of large mega-corporation</option>
+<option value="astronaut">Astronaut</option>
+<option value="doctor">Medical doctor</option>
+<option value="model">Fashion model</option>
+<option value="rockstar">Rock star</option>
+<option value="garbage">Refuse collection operative</option>
 </select>
+<br />
 
-<p><hr noshade size=2>
+<label for="animal">Choose a pet:</label><br />
+<select name="animal" id="animal">
+  <option value="cat">Cat</option>
+  <option value="dog">Dog</option>
+  <option value="duck">Duck</option>
+</select>
+<br />
 
-<p><b>Which of these animals would appeal to you as a pet?</b><br/>
-<input type=checkbox name=pets[] value="dog">Dog<br/>
-<input type=checkbox name=pets[] value="cat">Cat<br/>
-<input type=checkbox name=pets[] value="duck">Duck<br/>
-
-<p><b>Enter a message or comment if you have one.</b><br/>
+<p>Enter a message or comment if you have one.</p><br/>
 <textarea name="message" cols="60" rows="6"></textarea>
 <br/><br/>
 
