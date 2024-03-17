@@ -37,6 +37,14 @@
     text += "Residence: " + user.residence[0] + "<br>";
     text += "Favorite Animal: " + user.animal[0] + "<br>";
 
+    text += "<h3>Questions</h3>";
+    for (const key in user) {
+        if (key.startsWith("question")) {
+            text += `${key}: ${user[key][0]}<br>`;
+        }
+    }
+
+
     text += "<h3>Pet Information</h3>";
     text += "Pet ID: " + pet.id + "<br>";
     text += "<img src='" + pet.url + "' alt='Pet Image' width='" + pet.width + "' height='" + pet.height + "'><br>";

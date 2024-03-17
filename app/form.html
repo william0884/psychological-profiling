@@ -53,6 +53,20 @@
         residence: document.forms["form"]["residence"].value,
         animal: document.forms["form"]["animal"].value,
 
+    }
+    for (var i = 1; i <= 20; i++) {
+    var questionName = 'question[' + i + ']';
+    var checkedRadioButton = document.querySelector('input[type="radio"][name="' + questionName + '"]:checked');
+    
+    if (checkedRadioButton) {
+        formData[questionName] = checkedRadioButton.value;
+    } else {
+        // Handle case when no radio button is checked for a question
+        formData[questionName] = ""; // Or any default value you prefer
+    }
+}
+
+
     };
 
     // Convert the formData object to a URL-encoded query string

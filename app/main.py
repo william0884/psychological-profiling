@@ -4,14 +4,7 @@ import os
 import base64
 import urllib
 import json
-from dotenv import load_dotenv
 import requests
-
-
-
-load_dotenv()
-
-FILMAPI = os.getenv('FILMAPI')
 
 hostName = "localhost"
 serverPort = 8080
