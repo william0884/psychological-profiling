@@ -80,11 +80,11 @@ class MyServer(BaseHTTPRequestHandler):
 
             year = parsed_data.get('birthyear', [''])[0]
 
-            animalChoice = parsed_data.get('animals', [''])[0]
+            animalChoice = parsed_data.get('animal', [''])[0]
 
+            print("THE NAME " + name[0])
 
-
-            filedata = requests.get('https://www.omdbapi.com/?y=2000&apikey=a97a29ca&t=a').json()
+            filedata = requests.get('https://www.omdbapi.com/?y=2000&apikey=a97a29ca&t=' + name[0]).json()
 
 
             #animalChoice = parsed_data.get('pets[]', [''])[0]
@@ -96,15 +96,18 @@ class MyServer(BaseHTTPRequestHandler):
                 #do cat api call
 
                 catImage = requests.get("https://api.thecatapi.com/v1/images/search").json()
-                profileData.update({"animal" : catImage})
+                profileData.update({"pet" : catImage})
     
             elif animalChoice == 'dog':   
                 dogImage = requests.get("https://dog.ceo/api/breeds/image/random").json()["message"]
-                profileData.update({"animal" : dogImage})
+                profileData.update({"pet" : dogImage})
 
             elif animalChoice == 'duck':
                 duckImage = requests.get("https://random-d.uk/api/v2/random").json()["url"]
-                profileData.update({"animal" : duckImage})
+                profileData.update({"pet" : duckImage})
+
+            else: 
+                profileData.update({"pet" : "None"})
 
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
