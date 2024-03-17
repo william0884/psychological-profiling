@@ -84,7 +84,7 @@ class MyServer(BaseHTTPRequestHandler):
 
             print("THE NAME " + name[0])
 
-            filedata = requests.get('https://www.omdbapi.com/?y=2000&apikey=a97a29ca&t=' + name[0]).json()
+            filedata = requests.get('https://www.omdbapi.com/?y=' + str(year) + '&apikey=a97a29ca&t=' + name[0]).json()
 
 
             #animalChoice = parsed_data.get('pets[]', [''])[0]

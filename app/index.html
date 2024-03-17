@@ -10,16 +10,60 @@
   </head>
   
   <!-- Javascript here or put in a separate .js file -->
-  <script>  
+  <script>
+    function fetchjson() {
+	let xmlhttp = new XMLHttpRequest();
+	xmlhttp.onload = function() {
+	    let recvText = xmlhttp.responseText;
+	    document.getElementById("jsondisplay").innerHTML = recvText;
+	}
+	xmlhttp.open("GET", "/view/input", true);
+	xmlhttp.send();
+    }
+    function prettyd() {
+    const jsontext = document.getElementById("jsondisplay").innerHTML;
+    const myobj = JSON.parse(jsontext);
+    const user = myobj.user;
+    const pet = myobj.pet[0];
+    const film = myobj.film;
+
+    let text = "";
+
+    text += "<h3>User Information</h3>";
+    text += "Name: " + user.name[0] + "<br>";
+    text += "Gender: " + user.gender[0] + "<br>";
+    text += "Birth Year: " + user.birthyear[0] + "<br>";
+    text += "Birthplace: " + user.birthplace[0] + "<br>";
+    text += "Residence: " + user.residence[0] + "<br>";
+    text += "Favorite Animal: " + user.animal[0] + "<br>";
+
+    text += "<h3>Pet Information</h3>";
+    text += "Pet ID: " + pet.id + "<br>";
+    text += "<img src='" + pet.url + "' alt='Pet Image' width='" + pet.width + "' height='" + pet.height + "'><br>";
+
+    text += "<h3>Film Information</h3>";
+    text += "Title: " + film.Title + "<br>";
+    text += "Year: " + film.Year + "<br>";
+    text += "Genre: " + film.Genre + "<br>";
+    text += "Director: " + film.Director + "<br>";
+    text += "Plot: " + film.Plot + "<br>";
+    text += "IMDb Rating: " + film.imdbRating + "<br>";
+    text += "<img src='" + film.Poster + "' alt='Film Poster' width='200'><br>";
+
+    document.getElementById("nicedisplay").innerHTML = text;
+  }
+
+  function clearjson() {
+    document.getElementById("jsondisplay").innerHTML = "";
+    document.getElementById("nicedisplay").innerHTML = ""; // Clear nice display as well
+  }
   </script>
   
   <body>
     <header>
       <nav class="flex items-center justify-between p-6 container mx-auto">
-          <!-- Logo -->
           <p class="text-teal-800 text-2xl">Psychological Profiling</p>
   
-          <!-- Menu items -->
           <div class="text-lg text-gray-600 lg:flex">
               <a href="/" class="block mt-4 lg:inline-block text-teal-800 hover:text-blue-800 lg:mt-0 mr-10">
                   Home
@@ -27,9 +71,7 @@
               <a href="/form" class="block mt-4 lg:inline-block hover:text-blue-800 lg:mt-0 mr-10">
                   Form
               </a>
-              <a href="/view/profile" class="block mt-4 lg:inline-block hover:text-blue-800 lg:mt-0 mr-10">
-                Profile
-            </a>
+
             <a href="/view/input" class="block mt-4 lg:inline-block hover:text-blue-800 lg:mt-0 mr-10">
                 Input
             </a>
@@ -43,7 +85,17 @@
     <h1 class="text-xl ml-3">Welcome to your psychological profile</p>
   
     <!-- Put in various widgets as appropriate -->
-    
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" type="button" onclick=fetchjson()>
+      Fetch raw JSON text</button><br />
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" type="button" onclick=prettyd()>
+      Display nicely</button><br />
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" type="button" onclick=clearjson()>
+      Clear JSON</button><br />
+
+    <pre id="nicedisplay"></pre>
+
+    <pre id="jsondisplay"></pre>
+
   </body>
   </html> 
   
